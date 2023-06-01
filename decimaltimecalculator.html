@@ -1,21 +1,164 @@
-    <form class="military_to_standard_form" id="military_to_standard_form">
+<section class="content_pages__header">
+    <h1 class="content_pages__header__h1"> Decimal Hours Converter</h1>
+    <p>Do you need help converting employee hours and minutes to decimal time for the sake of payroll? All those decimals can look confusing. Our time-to-decimal calculator is here to help you.<br>Use it to turn time into decimals in an instant.</p>
+    <span class="notice" style="color: #999; font-size: 14px;"> Click <img src="/assets/images/swap_horiz.svg" alt="swap_icon" class="swap_icon"> to switch. <span id="switch_con"> </span> </span>
+    <!-- Decimal to standard time form -->
+    <form class="military_to_standard_form d-none" id="military_to_standard_form" data-np-autofill-type="other" data-np-checked="1" data-np-watching="1">
         <div class="label">
             <span> DECIMAL HOURS CONVERTER </span>
         </div>
         <div class="m_to_s_main">
             <div class="enter_info_label_icon decimal">
                 <label> Enter decimal hours: </label>
-                <img src="/assets/images/swap_horiz.svg" alt="swap_icon" class="swap_icon" onClick="switchCard(this.form)">
+                <img src="/assets/images/swap_horiz.svg" alt="swap_icon" class="swap_icon" onclick="switchCard(this.form)">
             </div>
         <!-- User input field -->
             <input class="user_inputs" type="text" name="mil_to_stn_input" value="" placeholder="e.g. 3.25" oninput="validate(this)"> <br>
         <!-- Error message -->
             <span id="m_to_s_error"></span>
-                <input class="convert_button" type="submit" value="CONVERT" id="submit" onClick="convertMilitaryToStandardTime(this.form)">
+                <input class="convert_button" type="submit" value="CONVERT" id="submit" onclick="convertMilitaryToStandardTime(this.form)">
         <!-- Result -->
             <div>
-                <span class="mil_to_stn_result" id="mil_to_stn_result"></span>
-                <span class="mil_to_stn_result_min" id="mil_to_stn_result_min"></span>
+                <span class="mil_to_stn_result d-none" id="mil_to_stn_result"></span>
+                <span class="mil_to_stn_result_min d-none" id="mil_to_stn_result_min"></span>
             </div>
         </div>
     </form>
+    <!-- Standard time to decimal -->
+    <form class="standard_to_military_form d-block" id="standard_to_military_form" data-np-autofill-type="other" data-np-checked="1" data-np-watching="1">
+        <div class="label">
+            <span> DECIMAL HOURS CONVERTER </span>
+        </div>
+        <div class="s_to_m_main">
+            <div class="enter_info_label_icon">
+                <label> Enter hours and minutes: </label>
+                <img src="/assets/images/swap_horiz.svg" alt="swap_icon" class="swap_icon" onclick="switchCard1(this.form)">
+            </div>
+            <!-- User input field -->
+            <input class="user_inputs user_inputs--decimal" type="text" name="s_to_m_hours_input" value="">
+            <!-- User input field -->
+            <input class="user_inputs user_inputs--decimal" type="text" name="s_to_m_mins_input" value="">
+            <!-- Error messages -->
+            <span id="s_to_m_hours_error"></span>
+            <input class="convert_button" type="submit" value="CONVERT" id="submit" onclick="convertStandardToMilitaryTime(this.form)">
+            <!-- Result -->
+            <div>
+                <span class="stn_to_mil_result" id="stn_to_mil_result"></span>
+            </div>
+    
+</div></form>
+
+<script>
+
+var validate = function(e) {
+  var t = e.value;
+  e.value = (t.indexOf(".") >= 0) ? (t.substr(0, t.indexOf(".")) + t.substr(t.indexOf("."), 3)) : t;
+}
+
+function convertMilitaryToStandardTime (form) {
+
+  Result = form.mil_to_stn_input.value;
+
+  if(Result.length > 10 || isNaN(Result) || Result < 0 || Result.indexOf(" ") !== -1) {
+    document.getElementById("m_to_s_error").innerHTML = "Not a valid input!";
+    document.getElementById("mil_to_stn_result").classList.add('d-none');
+    document.getElementById("mil_to_stn_result").classList.remove('d-block');
+    document.getElementById("mil_to_stn_result_min").classList.add('d-none');
+    document.getElementById("mil_to_stn_result_min").classList.remove('d-block');
+  } else {
+    Result = Result.toString();
+    Result = Result.split('.');
+    MinutesResult = Result[1];
+
+    if (MinutesResult.slice(0,1) == 0 && MinutesResult > 0) {
+      MinutesConverted = 1;
+    } else {
+      MinutesConverted = MinutesResult * 60;
+    }
+
+    MinutesConverted = MinutesConverted.toString();
+
+    if (MinutesConverted > 59 && MinutesConverted < 1019 && ((MinutesConverted / 60) / 10 > 1)) {
+        MinutesConverted = MinutesConverted.slice(0,1);
+    }
+
+    if (MinutesConverted.length > 2) {
+        MinutesConverted = MinutesConverted.substring(0,2);
+    }
+
+    if (isNaN(MinutesConverted)) {
+        MinutesConverted = 0;
+    }
+
+    if (MinutesConverted == 60) {
+        MinutesConverted = 6;
+    }
+
+    document.getElementById("mil_to_stn_result").innerHTML = "Hours: " + Result[0];
+    document.getElementById("mil_to_stn_result_min").innerHTML = "Minutes: " + MinutesConverted;
+    document.getElementById("m_to_s_error").innerHTML = null;
+    document.getElementById("mil_to_stn_result").classList.add('d-block');
+    document.getElementById("mil_to_stn_result").classList.remove('d-none');
+    document.getElementById("mil_to_stn_result_min").classList.add('d-block');
+    document.getElementById("mil_to_stn_result_min").classList.remove('d-none');
+  }
+}
+
+function convertStandardToMilitaryTime (form) {
+
+  Hours = form.s_to_m_hours_input.value;
+  Minutes = form.s_to_m_mins_input.value;
+
+  if(Hours.length > 5  || Hours.length < 1 || isNaN(Hours) || Hours < 0
+    || Minutes.length > 5 || isNaN(Minutes) || Minutes < 0
+    || Hours.indexOf(".") !== -1 || Hours.indexOf(" ") !== -1
+    || Minutes.indexOf(".") !== -1 || Minutes.indexOf(" ") !== -1) {
+
+      document.getElementById("s_to_m_hours_error").innerHTML = "Not a valid input!";
+      document.getElementById("stn_to_mil_result").classList.add('d-none');
+      document.getElementById("stn_to_mil_result").classList.remove('d-block');
+    } else {
+
+      t = Hours + ":" + Minutes;
+
+      function timeToDecimal (t) {
+        t = t.split(':');
+        return parseFloat(parseInt(t[0], 10) + parseInt(t[1], 10)/60).toFixed(2);
+      }
+
+      Result = +timeToDecimal(t);
+      document.getElementById("stn_to_mil_result").innerHTML  = Result;
+      document.getElementById("stn_to_mil_result").classList.add('d-block');
+      document.getElementById("stn_to_mil_result").classList.remove('d-none');
+      document.getElementById("s_to_m_hours_error").innerHTML = null;
+  }
+}
+
+function switchCard (form){
+    document.getElementById("military_to_standard_form").classList.add('d-none');
+    document.getElementById("military_to_standard_form").classList.remove('d-block');
+    document.getElementById("standard_to_military_form").classList.add('d-block');
+    document.getElementById("standard_to_military_form").classList.remove('d-none');
+    document.getElementById("mil_to_stn_result").classList.add('d-none');
+    document.getElementById("mil_to_stn_result_min").classList.add('d-none');
+    document.getElementById("m_to_s_error").innerHTML = null;
+}
+
+function switchCard1 (form){
+    document.getElementById("standard_to_military_form").classList.add('d-none');
+    document.getElementById("military_to_standard_form").classList.add('d-block');
+    document.getElementById("military_to_standard_form").classList.remove('d-none');
+    document.getElementById("stn_to_mil_result").classList.add('d-none');
+    document.getElementById("s_to_m_hours_error").innerHTML = null;
+}
+
+function preventEnterSubmit(event) {
+  event.preventDefault();
+}
+
+document.getElementById('military_to_standard_form').addEventListener('submit', preventEnterSubmit);
+document.getElementById('standard_to_military_form').addEventListener('submit', preventEnterSubmit);
+
+</script>
+
+</section>
