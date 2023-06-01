@@ -19,25 +19,3 @@
             </div>
         </div>
     </form>
-    <!-- Standard time to decimal -->
-    <form class="standard_to_military_form" id="standard_to_military_form">
-        <div class="label">
-            <span> DECIMAL HOURS CONVERTER </span>
-        </div>
-        <div class="s_to_m_main">
-            <div class="enter_info_label_icon">
-                <label> Enter hours and minutes: </label>
-                <img src="/assets/images/swap_horiz.svg" alt="swap_icon" class="swap_icon" onClick="switchCard1(this.form)">
-            </div>
-            <!-- User input field -->
-            <input class="user_inputs user_inputs--decimal" type="text" name="s_to_m_hours_input" value="">
-            <!-- User input field -->
-            <input class="user_inputs user_inputs--decimal" type="text" name="s_to_m_mins_input" value="">
-            <!-- Error messages -->
-            <span id="s_to_m_hours_error"></span>
-            <input class="convert_button" type="submit" value="CONVERT" id="submit" onClick="convertStandardToMilitaryTime(this.form)">
-            <!-- Result -->
-            <div>
-                <span class="stn_to_mil_result" id="stn_to_mil_result"></span>
-            </div>
-    </form>
